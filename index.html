@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luisina Ysa — Analista de Datos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #0D0D0D;
+  --surface: #1A1A1A;
+  --ink: #FAFAF6;
+  --ink-soft: #A6A39B;
+  --accent: #0BC4D9;
+  --accent-lime: #07D9D9;
+  --terra: #F24949;
+  --line: #262626;
+  --max-width: 720px;
+}
+
+* { box-sizing: border-box; }
+
+.top-bar { height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent-lime), var(--terra)); }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Roboto', -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.mono {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #F24949;
+  color: #FAFAF6;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+.wordmark { font-family: 'Libre Baskerville', serif; font-size: 1.15rem; font-weight: 700; }
+.wordmark-group { display: flex; align-items: center; }
+
+.data-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.12;
+}
+
+.main-nav { display: flex; gap: 1.25rem; font-size: 0.9rem; color: var(--ink-soft); }
+.main-nav a:hover { color: var(--accent); }
+
+/* Hero */
+.hero { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+.eyebrow-plain { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.75rem; }
+.hero h1 { font-size: 2.3rem; line-height: 1.25; margin-bottom: 1rem; display: inline-block; border-bottom: 3px solid var(--terra); padding-bottom: 0.5rem; }
+.hero-sub { color: var(--ink-soft); max-width: 56ch; margin-bottom: 1.5rem; text-align: justify; }
+
+.text-link {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-lime);
+  padding-bottom: 2px;
+  font-size: 0.95rem;
+}
+.text-link:hover { opacity: 0.7; }
+
+.cta-button {
+  display: inline-block;
+  background: var(--terra);
+  color: #FAFAF6;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 2.2rem;
+  border-radius: 30px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.cta-button:hover {
+  background: var(--accent);
+  color: #04262b;
+  transform: scale(1.04);
+}
+
+/* Sections */
+.section {
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 2.25rem 1.75rem;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.section h2 {
+  font-size: 1.45rem;
+  margin-bottom: 1.1rem;
+  display: inline-block;
+  border-bottom: 3px solid var(--terra);
+  padding-bottom: 0.4rem;
+}
+.section h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.section p { color: var(--ink-soft); max-width: 62ch; text-align: justify; }
+
+.section ul { color: var(--ink-soft); max-width: 62ch; padding-left: 1.1rem; text-align: justify; }
+.section ul li { margin-bottom: 0.4rem; }
+.section strong { color: var(--ink); font-weight: 700; }
+
+/* Ficha rapida */
+.ficha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+.ficha strong { color: var(--ink); }
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.flow-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.flow-arrow { color: var(--terra); font-size: 1rem; }
+
+/* Data model chips */
+.model-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; }
+.chip {
+  position: relative;
+  background: var(--accent-lime);
+  color: #052626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 5px;
+  cursor: help;
+}
+.chip .tip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1A1A1A;
+  color: #FAFAF6;
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 400;
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+.chip:hover .tip, .chip:focus .tip { visibility: visible; opacity: 1; }
+
+/* Details / collapsible */
+details.case {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  margin: 1rem 0;
+}
+details.case summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--accent);
+  list-style: none;
+}
+details.case summary::-webkit-details-marker { display: none; }
+details.case summary::before { content: "+ "; color: var(--terra); }
+details.case[open] summary::before { content: "− "; }
+details.case .case-body { margin-top: 0.85rem; color: var(--ink-soft); font-size: 0.92rem; }
+details.case .case-body p { margin: 0 0 0.6rem; }
+details.case .case-body strong { color: var(--ink); }
+
+/* Stat row */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 1.75rem;
+}
+.stat-row .stat {
+  text-align: left;
+  flex: 1;
+  min-width: 150px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+}
+.stat-num { font-family: 'Libre Baskerville', serif; font-size: 2.1rem; color: var(--accent); display: block; }
+.stat-label { font-size: 0.8rem; color: var(--ink-soft); }
+
+/* Dashboard visual card */
+.viz-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+.viz-title { font-size: 0.78rem; font-weight: 700; color: #a3255e; background: #f0b87a; margin: 0 0 0.9rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 8px 14px; border-radius: 4px; text-align: center; }
+.viz-card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.viz-card th { text-align: right; padding: 5px 8px; color: var(--ink-soft); font-weight: 500; border-bottom: 1px solid var(--line); }
+.viz-card th:first-child, .viz-card td:first-child { text-align: left; }
+.viz-card td { padding: 5px 8px; text-align: right; color: var(--ink); }
+.viz-card tr.total td { font-weight: 700; border-top: 1px solid var(--line); }
+
+.pie-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.pie-block { text-align: center; flex: 1; min-width: 130px; }
+.pie-block p { font-size: 0.78rem; color: var(--ink-soft); margin: 0 0 0.5rem; }
+.pie { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 0.5rem; }
+.pie-legend { text-align: left; display: inline-block; font-size: 0.72rem; color: var(--ink-soft); }
+.pie-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.pie-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+/* Projects (home) */
+.project-entry { padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
+.project-entry:last-child { border-bottom: none; }
+.project-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.project-entry h3 { font-size: 1.15rem; font-weight: 700; }
+.project-entry h3 a:hover { color: var(--accent); }
+.project-tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.project-tools span { font-size: 0.72rem; color: #0BC4D9; border: 1px solid #0BC4D9; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+.project-entry p { margin: 0 0 1rem; }
+.project-stats { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.project-entry-pending { opacity: 0.6; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 2rem; }
+.skill-group h4 { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.95rem; margin: 0 0 0.35rem; }
+.skill-group p { font-size: 0.92rem; margin: 0; }
+
+/* Experience */
+.exp-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.exp-entry h3 { font-size: 1.1rem; font-weight: 700; }
+.exp-dates { font-size: 0.85rem; }
+
+/* Contact */
+.contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* Footer */
+.site-footer { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 4rem; color: var(--ink-soft); font-size: 0.85rem; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.75rem; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .site-header { flex-direction: column; align-items: flex-start; }
+  .flow { flex-direction: column; align-items: flex-start; }
+  .flow-arrow { transform: rotate(90deg); margin-left: 0.5rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+<svg class="data-bg" viewBox="0 0 1000 1400" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+  <polyline points="0,900 120,860 240,880 360,760 480,800 600,640 720,690 840,560 960,600 1000,540" fill="none" stroke="#0BC4D9" stroke-width="3"/>
+  <polyline points="0,1050 100,1020 220,1040 340,980 460,1000 580,920 700,950 820,870 940,900 1000,860" fill="none" stroke="#07D9D9" stroke-width="3"/>
+  <polyline points="0,150 110,190 230,160 350,220 470,190 590,250 710,210 830,270 950,240 1000,280" fill="none" stroke="#F24949" stroke-width="3"/>
+  <circle cx="240" cy="880" r="6" fill="#0BC4D9"/>
+  <circle cx="600" cy="640" r="6" fill="#0BC4D9"/>
+  <circle cx="840" cy="560" r="6" fill="#0BC4D9"/>
+  <circle cx="340" cy="980" r="6" fill="#07D9D9"/>
+  <circle cx="700" cy="950" r="6" fill="#07D9D9"/>
+  <circle cx="350" cy="220" r="6" fill="#F24949"/>
+  <circle cx="710" cy="210" r="6" fill="#F24949"/>
+</svg>
+
+<header class="site-header">
+  <a href="index.html" class="wordmark-group">
+    <span class="logo-badge">LY</span>
+    <span class="wordmark">Luisina Ysa</span>
+  </a>
+  <nav class="main-nav">
+    <a href="#sobre-mi">Sobre mí</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#habilidades">Habilidades</a>
+    <a href="#experiencia">Experiencia</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow-plain">Analista de datos</p>
+    <h1>Ordeno datos dispersos<br>hasta que cuentan una historia.</h1>
+    <p class="hero-sub">Trabajo en la intersección entre datos desordenados y decisiones de negocio: consolidación, automatización y visualización, con foco en que el resultado sea algo que otros puedan usar y confiar.</p>
+    <div style="text-align: center; margin-top: 1.5rem;">
+      <a href="#proyectos" class="cta-button">Ver proyectos</a>
+    </div>
+  </section>
+  <section id="sobre-mi" class="section">
+    <div style="display:flex; gap:1.5rem; align-items:flex-start; flex-wrap:wrap;">
+      <img src="assets/foto-luisina.png" alt="Luisina Ysa" style="width:110px; height:110px; border-radius:50%; object-fit:cover; flex-shrink:0;">
+      <div style="flex:1; min-width:240px;">
+        <h2 style="margin-bottom:1rem;">Sobre mí</h2>
+      </div>
+    </div>
+    <p>Profesional orientada al análisis de datos, la generación de indicadores y la mejora de procesos para apoyar la toma de decisiones.</p>
+    <p>Experiencia en el diseño e implementación de procesos ETL, automatización de información, desarrollo de dashboards y elaboración de reportes mediante herramientas de Business Intelligence.</p>
+    <p>Mi formación como Licenciada en Trabajo Social aporta una mirada integral sobre el impacto social, la gestión de la información y el trabajo interdisciplinario, facilitando la articulación entre datos, personas y organizaciones.</p>
+    <p>Actualmente profundizo mi formación en sostenibilidad, negocios sustentables y criterios ESG, con el objetivo de integrar el análisis de datos y la gestión basada en indicadores en proyectos de sostenibilidad, responsabilidad social y mejora continua.</p>
+  </section>
+  <section id="proyectos" class="section">
+    <h2>Proyectos</h2>
+
+    <article class="project-entry">
+      <div class="project-entry-head">
+        <h3><a href="proyecto-estaciones.html">Sistema de consolidación de datos para una cadena de estaciones de servicio</a></h3>
+        <span class="project-tools"><span>Google Sheets</span><span>Apps Script</span><span>Looker Studio</span></span>
+      </div>
+      <p>Rediseñé un proceso de reporting que dependía de tres personas transcribiendo datos a mano cada mes, y lo reemplacé por un sistema automatizado que consolida 7 estaciones y 6 años de histórico en una sola fuente de verdad.</p>
+      <div class="project-stats">
+        <span><strong class="mono">7</strong> estaciones consolidadas</span>
+        <span><strong class="mono">6</strong> años de histórico unificados</span>
+        <span><strong class="mono">3</strong> pasos manuales eliminados</span>
+      </div>
+      <a href="proyecto-estaciones.html" class="text-link">Ver el proyecto completo</a>
+    </article>
+
+    <article class="project-entry">
+      <div class="project-entry-head">
+        <h3><a href="proyecto-volumenes-parciales.html">Análisis y Proyección de Volúmenes Parciales</a></h3>
+        <span class="project-tools"><span>Google Sheets</span><span>Apps Script</span><span>Looker Studio</span></span>
+      </div>
+      <p>Sistema de seguimiento mensual que estima el cierre del mes a partir de cortes parciales de venta, comparando contra presupuesto en tiempo real.</p>
+      <div class="project-stats">
+        <span><strong class="mono">7</strong> estaciones</span>
+        <span><strong class="mono">3</strong> cortes mensuales</span>
+        <span><strong class="mono">1</strong> ciclo anual automatizado</span>
+      </div>
+      <a href="proyecto-volumenes-parciales.html" class="text-link">Ver el proyecto completo</a>
+    </article>
+
+    <article class="project-entry">
+      <div class="project-entry-head">
+        <h3><a href="proyecto-asesoria.html">Base de datos y app de gestión de clientes para una asesoría financiera</a></h3>
+        <span class="project-tools"><span>AppSheet</span><span>Google Sheets</span><span>Apps Script</span></span>
+      </div>
+      <p>Conecté las bases de 4 ALyC, el registro de calificaciones crediticias y la documentación en Drive en un modelo relacional, con una app que el equipo usa a diario: ficha única por cliente, agenda, alertas de vencimiento y control automático de documentación.</p>
+      <div class="project-stats">
+        <span><strong class="mono">4</strong> ALyC integradas</span>
+        <span><strong class="mono">9</strong> tablas conectadas por CUIT</span>
+        <span><strong class="mono">1</strong> ficha por cliente</span>
+      </div>
+      <a href="proyecto-asesoria.html" class="text-link">Ver el proyecto completo</a>
+    </article>
+
+  </section>
+  <section id="habilidades" class="section">
+    <h2>Habilidades</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Visualización</h4>
+        <p>Power BI, Tableau, Looker Studio</p>
+      </div>
+      <div class="skill-group">
+        <h4>Análisis y ofimática</h4>
+        <p>Excel, Google Sheets</p>
+      </div>
+      <div class="skill-group">
+        <h4>Lenguaje y bases de datos</h4>
+        <p>SQL, Python, Google Apps Script, AppSheets</p>
+      </div>
+      <div class="skill-group">
+        <h4>Procesos de datos</h4>
+        <p>ETL, data modeling, reporting, data visualization, automatización de procesos</p>
+      </div>
+    </div>
+  </section>
+  <section id="experiencia" class="section">
+    <h2>Experiencia</h2>
+    <div class="exp-entry">
+      <div class="exp-entry-head">
+        <h3>Analista de Datos — Freelance</h3>
+        <span class="mono exp-dates">2025 — 2026</span>
+      </div>
+      <p>Diseño e implementación de un sistema de consolidación y reporting de datos operativos para una cadena de estaciones de servicio. Automatización con Apps Script, modelado de datos y dashboards en Looker Studio.</p>
+    </div>
+  </section>
+  <section id="contacto" class="section">
+    <h2>Contacto</h2>
+    <p>¿Querés charlar sobre un proyecto o una posición? Escribime.</p>
+    <div class="contact-links">
+      <a href="mailto:ysaluisina@gmail.com" class="text-link">ysaluisina@gmail.com</a>
+      <a href="https://www.linkedin.com/in/luisina-ysa/" class="text-link">LinkedIn</a>
+      <a href="https://docs.google.com/document/d/1-1T6qWPYErdSlr_KKcZqEW9jvaXy09xtq06oh1JIVUc/export?format=pdf" class="text-link" id="cv-link" target="_blank">Descargar CV</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Luisina Ysa · Analista de Datos</p>
+</footer>
+
+</body>
+</html>

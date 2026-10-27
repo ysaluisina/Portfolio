@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base de datos y app de gestión de clientes — Luisina Ysa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #0D0D0D;
+  --surface: #1A1A1A;
+  --ink: #FAFAF6;
+  --ink-soft: #A6A39B;
+  --accent: #0BC4D9;
+  --accent-lime: #07D9D9;
+  --terra: #F24949;
+  --line: #262626;
+  --max-width: 720px;
+}
+
+* { box-sizing: border-box; }
+
+.top-bar { height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent-lime), var(--terra)); }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Roboto', -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.mono {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.wordmark { font-family: 'Libre Baskerville', serif; font-size: 1.15rem; font-weight: 700; }
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #F24949;
+  color: #FAFAF6;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+.wordmark-group { display: flex; align-items: center; }
+
+.main-nav { display: flex; gap: 1.25rem; font-size: 0.9rem; color: var(--ink-soft); }
+.main-nav a:hover { color: var(--accent); }
+
+/* Hero */
+.hero { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+.eyebrow-plain { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.75rem; }
+.hero h1 { font-size: 2.3rem; line-height: 1.25; margin-bottom: 1rem; display: inline-block; border-bottom: 3px solid var(--terra); padding-bottom: 0.5rem; }
+.hero-sub { color: var(--ink-soft); max-width: 56ch; margin-bottom: 1.5rem; text-align: justify; }
+
+.text-link {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-lime);
+  padding-bottom: 2px;
+  font-size: 0.95rem;
+}
+.text-link:hover { opacity: 0.7; }
+
+/* Sections */
+.section {
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 2.25rem 1.75rem;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.section h2 {
+  font-size: 1.45rem;
+  margin-bottom: 1.1rem;
+  display: inline-block;
+  border-bottom: 3px solid var(--terra);
+  padding-bottom: 0.4rem;
+}
+.section h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.section p { color: var(--ink-soft); max-width: 62ch; text-align: justify; }
+
+.section ul { color: var(--ink-soft); max-width: 62ch; padding-left: 1.1rem; text-align: justify; }
+.section ul li { margin-bottom: 0.4rem; }
+.section strong { color: var(--ink); font-weight: 700; }
+
+/* Ficha rapida */
+.ficha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+.ficha strong { color: var(--ink); }
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.flow-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.flow-arrow { color: var(--terra); font-size: 1rem; }
+
+/* Data model chips */
+.model-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; }
+.chip {
+  position: relative;
+  background: var(--accent-lime);
+  color: #052626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 5px;
+  cursor: help;
+}
+.chip .tip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1A1A1A;
+  color: #FAFAF6;
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 400;
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+.chip:hover .tip, .chip:focus .tip { visibility: visible; opacity: 1; }
+
+/* Details / collapsible */
+details.case {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  margin: 1rem 0;
+}
+details.case summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--accent);
+  list-style: none;
+}
+details.case summary::-webkit-details-marker { display: none; }
+details.case summary::before { content: "+ "; color: var(--terra); }
+details.case[open] summary::before { content: "− "; }
+details.case .case-body { margin-top: 0.85rem; color: var(--ink-soft); font-size: 0.92rem; }
+details.case .case-body p { margin: 0 0 0.6rem; }
+details.case .case-body strong { color: var(--ink); }
+
+/* Stat row */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 1.75rem;
+}
+.stat-row .stat {
+  text-align: left;
+  flex: 1;
+  min-width: 150px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+}
+.stat-num { font-family: 'Libre Baskerville', serif; font-size: 2.1rem; color: var(--accent); display: block; }
+.stat-label { font-size: 0.8rem; color: var(--ink-soft); }
+
+/* Dashboard visual card */
+.viz-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+.viz-title { font-size: 0.78rem; font-weight: 700; color: #a3255e; background: #f0b87a; margin: 0 0 0.9rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 8px 14px; border-radius: 4px; text-align: center; }
+.viz-card p { text-align: left; max-width: none; }
+.viz-card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.viz-card th { text-align: right; padding: 5px 8px; color: #555; font-weight: 500; border-bottom: 1px solid #ddd; }
+.viz-card th:first-child, .viz-card td:first-child { text-align: left; }
+.viz-card td { padding: 5px 8px; text-align: right; color: #2c2c54; }
+.viz-card tr.total td { font-weight: 700; border-top: 1px solid #ccc; }
+
+.pie-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.pie-block { text-align: center; flex: 1; min-width: 130px; }
+.pie-block p { font-size: 0.78rem; color: var(--ink-soft); margin: 0 0 0.5rem; }
+.pie { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 0.5rem; }
+.pie-legend { text-align: left; display: inline-block; font-size: 0.72rem; color: var(--ink-soft); }
+.pie-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.pie-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+/* Projects (home) */
+.project-entry { padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
+.project-entry:last-child { border-bottom: none; }
+.project-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.project-entry h3 { font-size: 1.15rem; font-weight: 700; }
+.project-entry h3 a:hover { color: var(--accent); }
+.project-tools { font-size: 0.82rem; color: var(--ink-soft); white-space: nowrap; }
+.project-entry p { margin: 0 0 1rem; }
+.project-stats { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.project-entry-pending { opacity: 0.6; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 2rem; }
+.skill-group h4 { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.95rem; margin: 0 0 0.35rem; }
+.skill-group p { font-size: 0.92rem; margin: 0; }
+
+/* Experience */
+.exp-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.exp-entry h3 { font-size: 1.1rem; font-weight: 700; }
+.exp-dates { font-size: 0.85rem; }
+
+/* Contact */
+.contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* Footer */
+.site-footer { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 4rem; color: var(--ink-soft); font-size: 0.85rem; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.75rem; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .site-header { flex-direction: column; align-items: flex-start; }
+  .flow { flex-direction: column; align-items: flex-start; }
+  .flow-arrow { transform: rotate(90deg); margin-left: 0.5rem; }
+}
+
+
+/* Evita que los tooltips de las tablas generen scroll lateral en celular */
+main { overflow-x: clip; }
+
+/* Capturas de la app */
+.shot { margin: 1.25rem 0 1.5rem; }
+.shot img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.shot.phone img { max-width: 320px; margin: 0 auto; }
+.shot-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-start; }
+.shot-row .shot { flex: 1; min-width: 220px; margin: 0.5rem 0; }
+.shot a { display: block; cursor: zoom-in; }
+.shot figcaption { font-size: 0.8rem; color: var(--ink-soft); margin-top: 0.5rem; text-align: center; }
+.shot-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Semáforo de vencimientos */
+.status-row { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0 1.25rem; }
+.status-pill { font-size: 0.82rem; font-weight: 500; padding: 0.35rem 0.85rem; border-radius: 30px; color: #0D0D0D; }
+
+/* Dos columnas de texto */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem 2rem; margin-top: 0.5rem; }
+.two-col h3 { margin-bottom: 0.4rem; }
+.two-col ul { margin-top: 0; }
+
+.insight {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1.05rem;
+  color: var(--ink);
+  border-left: 3px solid var(--terra);
+  padding-left: 1rem;
+  margin: 1.5rem 0 0.5rem;
+  max-width: 62ch;
+}
+
+@media (max-width: 600px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+
+<header class="site-header">
+  <a href="index.html" class="wordmark-group">
+    <span class="logo-badge">LY</span>
+    <span class="wordmark">Luisina Ysa</span>
+  </a>
+  <nav class="main-nav">
+    <a href="index.html">← Volver al inicio</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow-plain">Proyecto freelance</p>
+    <h1>Base de datos y app de gestión de clientes</h1>
+    <p class="hero-sub">Centralización de la cartera de clientes, las calificaciones crediticias y la documentación de una asesoría financiera, en una app de uso interno que el equipo usa en el día a día.</p>
+  </section>
+
+  <div class="ficha">
+    <span><strong>Cliente:</strong> Asesoría financiera</span>
+    <span><strong>Rol:</strong> Diseño de datos y desarrollo · 2026</span>
+    <span><strong>Uso:</strong> Interno, solo para el equipo de la asesoría</span>
+    <span><strong>Herramientas:</strong> AppSheet · Google Sheets · Apps Script · Google Drive</span>
+  </div>
+
+  <section class="section">
+    <h2>El punto de partida</h2>
+    <p>La asesoría trabaja con cuentas comitentes en 4 ALyC y gestiona calificaciones crediticias ante SGR y entidades. Tenía su información en varios archivos separados, que no estaban conectados entre sí:</p>
+
+    <div class="flow">
+      <div class="flow-box">Una base por ALyC</div>
+      <span class="flow-arrow">+</span>
+      <div class="flow-box">Registro de calificaciones</div>
+      <span class="flow-arrow">+</span>
+      <div class="flow-box">Carpeta por cliente</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Cruce manual</div>
+    </div>
+
+    <p>Para tener la foto completa de un cliente, controlar vencimientos o saber qué documentación faltaba había que revisar a mano archivo por archivo. El objetivo fue <strong>conectar lo que ya existía</strong> y sumar una herramienta simple para el día a día.</p>
+  </section>
+
+  <section class="section">
+    <h2>Lo que desarrollé</h2>
+
+    <div class="flow">
+      <div class="flow-box">Fuentes existentes</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Google Sheets<br><span style="font-size:0.75rem;color:var(--ink-soft);">modelo relacional</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">AppSheet</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Equipo<br><span style="font-size:0.75rem;color:var(--ink-soft);">compu y celular</span></div>
+    </div>
+
+    <ul>
+      <li><strong>Base de datos:</strong> 9 tablas conectadas por CUIT, con una tabla maestra que consolida las fuentes sin duplicar registros.</li>
+      <li><strong>Aplicación:</strong> tablero diario, ficha única por cliente, formularios con validaciones y panel de reportes.</li>
+      <li><strong>Automatización:</strong> un script que cada noche lee las fichas de Drive y deja en la app lo que le falta a cada cliente.</li>
+    </ul>
+
+    <div class="model-chips">
+      <span class="chip" tabindex="0">Clientes<span class="tip">Tabla maestra, se arma sola desde tres fuentes</span></span>
+      <span class="chip" tabindex="0">Cuentas<span class="tip">Cuentas comitentes por ALyC</span></span>
+      <span class="chip" tabindex="0">Calificaciones<span class="tip">Estado por SGR o entidad y días para vencer</span></span>
+      <span class="chip" tabindex="0">Interacciones<span class="tip">Historial comercial y próxima acción</span></span>
+      <span class="chip" tabindex="0">Contactos<span class="tip">Una persona puede representar a varias empresas</span></span>
+      <span class="chip" tabindex="0">Documentación<span class="tip">Faltantes por cliente, actualizado cada noche</span></span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>La aplicación</h2>
+    <p>Es una herramienta de uso interno: solo la usa el equipo de la asesoría. La pantalla de inicio muestra de un vistazo lo que hay que hacer en el día: pendientes, agenda, cumpleaños de la semana, aperturas de cuenta en curso e indicadores de calificaciones.</p>
+    <figure class="shot">
+      <a href="assets/asesoria-inicio.png" target="_blank" title="Ver en tamaño completo"><img src="assets/asesoria-inicio.png" alt="Pantalla de inicio de la app con pendientes, agenda y cumpleaños"></a>
+      <figcaption>Pantalla de inicio. Nombres de clientes reemplazados.</figcaption>
+    </figure>
+
+    <p>Cada cliente tiene una <strong>ficha</strong> con sus datos, contacto directo, última interacción, pendientes, documentación faltante, cuentas y calificaciones. La carga se hace desde la app, con validaciones de CUIT y teléfono, y control de duplicados.</p>
+    <figure class="shot">
+      <a href="assets/asesoria-ficha.png" target="_blank" title="Ver en tamaño completo"><img src="assets/asesoria-ficha.png" alt="Ficha de un cliente en la app, con datos anonimizados"></a>
+      <figcaption>Ficha de cliente. Datos personales reemplazados.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section">
+    <h2>Calificaciones y seguimiento</h2>
+    <p>Cada calificación calcula sola los días que faltan para vencer y se marca con una alerta de color:</p>
+
+    <div class="status-row">
+      <span class="status-pill" style="background:#F24949;">Vencida</span>
+      <span class="status-pill" style="background:#F2C14E;">Por vencer · 30 días o menos</span>
+      <span class="status-pill" style="background:#5FC48A;">Al día</span>
+    </div>
+
+    <figure class="shot">
+      <a href="assets/asesoria-calificaciones.png" target="_blank" title="Ver en tamaño completo"><img src="assets/asesoria-calificaciones.png" alt="Listado de créditos con estado, vencimiento y alerta"></a>
+      <figcaption>Listado de créditos por cliente, con días para vencer y alerta automática. Nombres reemplazados.</figcaption>
+    </figure>
+
+    <p>Cada contacto con un cliente queda registrado con su próxima acción, que alimenta sola la agenda. Las tareas se cierran con un toque sin perder el historial.</p>
+    <figure class="shot">
+      <a href="assets/asesoria-interacciones.png" target="_blank" title="Ver en tamaño completo"><img src="assets/asesoria-interacciones.png" alt="Registro de interacciones con fecha, detalle y próxima acción"></a>
+      <figcaption>Registro de interacciones. Nombres y datos sensibles reemplazados.</figcaption>
+    </figure>
+  </section>
+
+  <section class="section">
+    <h2>Automatización de la documentación</h2>
+
+    <div class="flow">
+      <div class="flow-box">Carpetas de Drive</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Ficha de documentación</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Identificación por CUIT</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Checklist en la app</div>
+    </div>
+
+    <p>Un script en Apps Script recorre cada noche las carpetas de los clientes, lee sus fichas (aunque tengan formatos distintos) y guarda qué documentos faltan. Los casos dudosos, como fichas sin CUIT, quedan registrados para que el equipo los revise.</p>
+  </section>
+
+  <section class="section">
+    <h2>Trabajo con el equipo</h2>
+
+    <div class="flow">
+      <div class="flow-box">Prototipo</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Presentación</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Ajustes</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Uso real</div>
+    </div>
+
+    <p>El proyecto se construyó por etapas, ajustando con el feedback del equipo durante el uso real.</p>
+    <p class="insight">El alta de clientes pasó de dos botones a una sola pregunta, “¿qué viene a hacer el cliente?”, que es como piensa quien está cargando.</p>
+  </section>
+
+  <section class="section">
+    <h2>Resultado</h2>
+
+    <div class="stat-row">
+      <div class="stat" style="border-left-color:#0BC4D9;"><span class="stat-num" style="color:#0BC4D9;">4</span><span class="stat-label">ALyC integradas en una sola base</span></div>
+      <div class="stat" style="border-left-color:#07D9D9;"><span class="stat-num" style="color:#07D9D9;">9</span><span class="stat-label">tablas conectadas por CUIT</span></div>
+      <div class="stat" style="border-left-color:#F24949;"><span class="stat-num" style="color:#F24949;">1</span><span class="stat-label">ficha con toda la información de cada cliente</span></div>
+    </div>
+
+    <p>La asesoría pasó de trabajar con archivos separados a una sola herramienta con toda la cartera, que el equipo usa a diario. Vencimientos, faltantes y agenda se calculan solos, y la estructura permite sumar nuevas vistas y reportes sin rehacer nada.</p>
+
+    <figure class="shot">
+      <a href="assets/asesoria-reportes.png" target="_blank" title="Ver en tamaño completo"><img src="assets/asesoria-reportes.png" alt="Panel de reportes con indicadores de cartera y gráficos"></a>
+      <figcaption>Panel de reportes: cartera, calificaciones, interacciones por mes y cuentas por ALyC</figcaption>
+    </figure>
+  </section>
+
+  <section class="section">
+    <a href="index.html" class="text-link">← Volver a todos los proyectos</a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Luisina Ysa · Analista de Datos</p>
+</footer>
+
+</body>
+</html>

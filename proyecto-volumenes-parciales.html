@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis y Proyección de Volúmenes Parciales — Luisina Ysa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #0D0D0D;
+  --surface: #1A1A1A;
+  --ink: #FAFAF6;
+  --ink-soft: #A6A39B;
+  --accent: #0BC4D9;
+  --accent-lime: #07D9D9;
+  --terra: #F24949;
+  --line: #262626;
+  --max-width: 720px;
+}
+
+* { box-sizing: border-box; }
+
+.top-bar { height: 5px; background: linear-gradient(90deg, var(--accent), var(--accent-lime), var(--terra)); }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Roboto', -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.mono {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+a { color: inherit; text-decoration: none; }
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* Header */
+.site-header {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.wordmark { font-family: 'Libre Baskerville', serif; font-size: 1.15rem; font-weight: 700; }
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #F24949;
+  color: #FAFAF6;
+  font-family: 'Libre Baskerville', serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+.wordmark-group { display: flex; align-items: center; }
+
+.main-nav { display: flex; gap: 1.25rem; font-size: 0.9rem; color: var(--ink-soft); }
+.main-nav a:hover { color: var(--accent); }
+
+/* Hero */
+.hero { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+.eyebrow-plain { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.75rem; }
+.hero h1 { font-size: 2.3rem; line-height: 1.25; margin-bottom: 1rem; display: inline-block; border-bottom: 3px solid var(--terra); padding-bottom: 0.5rem; }
+.hero-sub { color: var(--ink-soft); max-width: 56ch; margin-bottom: 1.5rem; text-align: justify; }
+
+.text-link {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent-lime);
+  padding-bottom: 2px;
+  font-size: 0.95rem;
+}
+.text-link:hover { opacity: 0.7; }
+
+/* Sections */
+.section {
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 2.25rem 1.75rem;
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.section h2 {
+  font-size: 1.45rem;
+  margin-bottom: 1.1rem;
+  display: inline-block;
+  border-bottom: 3px solid var(--terra);
+  padding-bottom: 0.4rem;
+}
+.section h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.section p { color: var(--ink-soft); max-width: 62ch; text-align: justify; }
+
+.section ul { color: var(--ink-soft); max-width: 62ch; padding-left: 1.1rem; text-align: justify; }
+.section ul li { margin-bottom: 0.4rem; }
+.section strong { color: var(--ink); font-weight: 700; }
+
+/* Ficha rapida */
+.ficha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  max-width: var(--max-width);
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+.ficha strong { color: var(--ink); }
+
+/* Flow diagram */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 1.5rem;
+}
+.flow-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.flow-arrow { color: var(--terra); font-size: 1rem; }
+
+/* Data model chips */
+.model-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.25rem 0; }
+.chip {
+  position: relative;
+  background: var(--accent-lime);
+  color: #052626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 5px;
+  cursor: help;
+}
+.chip .tip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1A1A1A;
+  color: #FAFAF6;
+  border: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 400;
+  padding: 0.5rem 0.7rem;
+  border-radius: 5px;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+  z-index: 5;
+}
+.chip:hover .tip, .chip:focus .tip { visibility: visible; opacity: 1; }
+
+/* Details / collapsible */
+details.case {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  margin: 1rem 0;
+}
+details.case summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--accent);
+  list-style: none;
+}
+details.case summary::-webkit-details-marker { display: none; }
+details.case summary::before { content: "+ "; color: var(--terra); }
+details.case[open] summary::before { content: "− "; }
+details.case .case-body { margin-top: 0.85rem; color: var(--ink-soft); font-size: 0.92rem; }
+details.case .case-body p { margin: 0 0 0.6rem; }
+details.case .case-body strong { color: var(--ink); }
+
+/* Stat row */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 1.75rem;
+}
+.stat-row .stat {
+  text-align: left;
+  flex: 1;
+  min-width: 150px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  padding: 0.85rem 1rem;
+}
+.stat-num { font-family: 'Libre Baskerville', serif; font-size: 2.1rem; color: var(--accent); display: block; }
+.stat-label { font-size: 0.8rem; color: var(--ink-soft); }
+
+/* Dashboard visual card */
+.viz-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+.viz-title { font-size: 0.78rem; font-weight: 700; color: #a3255e; background: #f0b87a; margin: 0 0 0.9rem; text-transform: uppercase; letter-spacing: 0.03em; padding: 8px 14px; border-radius: 4px; text-align: center; }
+.viz-card p { text-align: left; max-width: none; }
+.viz-card table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.viz-card th { text-align: right; padding: 5px 8px; color: #555; font-weight: 500; border-bottom: 1px solid #ddd; }
+.viz-card th:first-child, .viz-card td:first-child { text-align: left; }
+.viz-card td { padding: 5px 8px; text-align: right; color: #2c2c54; }
+.viz-card tr.total td { font-weight: 700; border-top: 1px solid #ccc; }
+
+.pie-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.pie-block { text-align: center; flex: 1; min-width: 130px; }
+.pie-block p { font-size: 0.78rem; color: var(--ink-soft); margin: 0 0 0.5rem; }
+.pie { width: 90px; height: 90px; border-radius: 50%; margin: 0 auto 0.5rem; }
+.pie-legend { text-align: left; display: inline-block; font-size: 0.72rem; color: var(--ink-soft); }
+.pie-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.pie-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+
+/* Projects (home) */
+.project-entry { padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
+.project-entry:last-child { border-bottom: none; }
+.project-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.6rem; }
+.project-entry h3 { font-size: 1.15rem; font-weight: 700; }
+.project-entry h3 a:hover { color: var(--accent); }
+.project-tools { font-size: 0.82rem; color: var(--ink-soft); white-space: nowrap; }
+.project-entry p { margin: 0 0 1rem; }
+.project-stats { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.project-entry-pending { opacity: 0.6; }
+
+/* Skills */
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem 2rem; }
+.skill-group h4 { font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 0.95rem; margin: 0 0 0.35rem; }
+.skill-group p { font-size: 0.92rem; margin: 0; }
+
+/* Experience */
+.exp-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.exp-entry h3 { font-size: 1.1rem; font-weight: 700; }
+.exp-dates { font-size: 0.85rem; }
+
+/* Contact */
+.contact-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
+
+/* Footer */
+.site-footer { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem 4rem; color: var(--ink-soft); font-size: 0.85rem; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.75rem; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .site-header { flex-direction: column; align-items: flex-start; }
+  .flow { flex-direction: column; align-items: flex-start; }
+  .flow-arrow { transform: rotate(90deg); margin-left: 0.5rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+
+<header class="site-header">
+  <a href="index.html" class="wordmark-group">
+    <span class="logo-badge">LY</span>
+    <span class="wordmark">Luisina Ysa</span>
+  </a>
+  <nav class="main-nav">
+    <a href="index.html">← Volver al inicio</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow-plain">Proyecto freelance</p>
+    <h1>Análisis y Proyección de Volúmenes Parciales</h1>
+    <p class="hero-sub">Seguimiento mensual de ventas y proyección de cierre para una cadena de estaciones de servicio, a partir de datos parciales.</p>
+  </section>
+
+  <div class="ficha">
+    <span><strong>Cliente:</strong> GSB</span>
+    <span><strong>Rol:</strong> Junior Data Analyst</span>
+    <span><strong>Herramientas:</strong> Google Sheets · Apps Script · Looker Studio</span>
+  </div>
+
+  <section class="section">
+    <h2>El problema</h2>
+    <p>Durante el mes, los volúmenes despachados disponibles son parciales — no el cierre definitivo. Cada encargado de estación carga el avance del mes en tres cortes, y hace falta estimar cómo va a terminar el mes antes de tener el dato final.</p>
+    <div class="flow">
+      <div class="flow-box">Corte parcial</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Días transcurridos</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Ritmo diario</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Proyección de cierre</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Cómo se carga</h2>
+    <p>El archivo trabaja únicamente sobre el año en curso. Cada encargado de estación completa el volumen acumulado y los días transcurridos en tres cortes mensuales — el resto se calcula automáticamente.</p>
+    <div class="flow">
+      <div class="flow-box">Corte 10°<br><span style="font-size:0.75rem;color:var(--ink-soft);">día ~11</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Corte 20°<br><span style="font-size:0.75rem;color:var(--ink-soft);">día ~21</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Corte 30°<br><span style="font-size:0.75rem;color:var(--ink-soft);">cierre del mes</span></div>
+    </div>
+    <p>En cada corte, el encargado completa el <strong>Real</strong> (acumulado vendido desde el día 1) y los <strong>Días</strong> transcurridos. Por ejemplo: si al día 11 se vendieron 40 unidades, Real = 40 y Días = 11.</p>
+  </section>
+
+  <section class="section">
+    <h2>La lógica de proyección</h2>
+    <div class="flow">
+      <div class="flow-box">Volumen acumulado</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Días transcurridos</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Ritmo promedio diario</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Proyección de días restantes</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">Volumen proyectado al cierre</div>
+    </div>
+    <p style="font-family:'Libre Baskerville',serif; font-size:1.1rem; color:var(--accent); text-align:center; margin:1.25rem 0;">Proyección = (Real ÷ Días) × Días del mes</p>
+    <p>La columna <strong>Proyección vigente</strong> siempre muestra el dato más actualizado disponible: prioriza el Corte 30°; si no existe, toma el 20°; si no existe, toma el 10°. Esto permite ver la situación actual sin revisar todos los cortes.</p>
+  </section>
+
+  <section class="section">
+    <h2>Estructura del sistema</h2>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h4>Hojas de estaciones</h4>
+        <p>Una por estación. Ahí se registran volúmenes parciales, días transcurridos, proyecciones, diferencias y % de cumplimiento — con una tabla de totales por corte al costado.</p>
+      </div>
+      <div class="skill-group">
+        <h4>Hoja de consolidado</h4>
+        <p>Reúne automáticamente la información de todas las estaciones. No requiere carga manual: centraliza datos, actualiza reportes y alimenta los dashboards.</p>
+      </div>
+      <div class="skill-group">
+        <h4>Hoja de estación corte</h4>
+        <p>Apoyo interno para el procesamiento de cortes y la consolidación automática. No debe modificarse manualmente.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>El modelo de datos</h2>
+    <p>Pasá el mouse sobre cada campo para ver su función.</p>
+    <div class="model-chips">
+      <span class="chip" tabindex="0">Real<span class="tip">Vendido acumulado desde el día 1</span></span>
+      <span class="chip" tabindex="0">Días<span class="tip">Días transcurridos del mes</span></span>
+      <span class="chip" tabindex="0">Proyección<span class="tip">Estimación automática de cierre</span></span>
+      <span class="chip" tabindex="0">Diferencia<span class="tip">Proyección − Presupuesto</span></span>
+      <span class="chip" tabindex="0">% Cumplimiento<span class="tip">Porcentaje del presupuesto que se proyecta alcanzar</span></span>
+      <span class="chip" tabindex="0">Proyección vigente<span class="tip">Prioriza Corte 30° → 20° → 10°</span></span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Automatización y gobernanza</h2>
+    <h3>Actualizar consolidado</h3>
+    <ul>
+      <li>Consolida la información de todas las estaciones.</li>
+      <li>Actualiza tablas y refresca cálculos.</li>
+      <li>Sincroniza datos entre hojas.</li>
+    </ul>
+
+    <details class="case">
+      <summary>Ver función de reseteo anual</summary>
+      <div class="case-body">
+        <p>El archivo trabaja solo sobre el año en curso — no compara históricos. Al cierre del año, la función <strong>"Resetear Año Nuevo"</strong> borra todos los datos cargados y reinicia el archivo para el ciclo siguiente, manteniendo intactas la estructura y las fórmulas.</p>
+        <p>Es una acción que no puede deshacerse fácilmente, así que se usa únicamente al inicio de un nuevo año, verificando antes que el año anterior esté completamente cerrado.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section">
+    <h2>Resultado</h2>
+
+    <div class="stat-row">
+      <div class="stat" style="border-left-color:#0BC4D9;"><span class="stat-num" style="color:#0BC4D9;">7</span><span class="stat-label">estaciones</span></div>
+      <div class="stat" style="border-left-color:#07D9D9;"><span class="stat-num" style="color:#07D9D9;">3</span><span class="stat-label">cortes mensuales</span></div>
+      <div class="stat" style="border-left-color:#F24949;"><span class="stat-num" style="color:#F24949;">1</span><span class="stat-label">ciclo anual automatizado</span></div>
+    </div>
+
+    <p>El resultado es un sistema de seguimiento mensual que anticipa el cierre del mes desde el primer corte, con dashboards en Looker Studio para monitorear cumplimiento, mix de producto y ritmo de venta.</p>
+
+    <div class="viz-card" style="font-family: Arial, sans-serif;">
+      <div style="background:#6b6b6b;color:white;padding:12px;text-align:center;font-weight:bold;border-radius:4px;margin-bottom:12px;">Resumen ejecutivo - GSB</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:90px;">Mes: julio (1)</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Estación</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Segmento</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Producto</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:60px;">Tipo</div>
+        <div style="background:#a3255e;color:white;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:bold;">Borrar filtros</div>
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:180px;border:1px solid #ddd;border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-size:12px;color:#555;">Combustibles - Proyectado</div>
+          <div style="font-size:24px;color:#1a2b6b;font-weight:bold;">3.063 m³</div>
+          <div style="font-size:12px;color:#c0392b;">93,8%</div>
+          <div style="background:#ddd;border-radius:4px;height:6px;margin-top:6px;"><div style="background:#c0392b;width:93.8%;height:6px;border-radius:4px;"></div></div>
+        </div>
+        <div style="flex:1;min-width:180px;border:1px solid #ddd;border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-size:12px;color:#555;">Lubricantes - Proyectado</div>
+          <div style="font-size:24px;color:#2e7d32;font-weight:bold;">8.667 lts</div>
+          <div style="font-size:12px;color:#c0392b;">76,5%</div>
+          <div style="background:#ddd;border-radius:4px;height:6px;margin-top:6px;"><div style="background:#c0392b;width:76.5%;height:6px;border-radius:4px;"></div></div>
+        </div>
+        <div style="flex:1;min-width:180px;border:1px solid #ddd;border-radius:6px;padding:14px;text-align:center;">
+          <div style="font-size:12px;color:#555;">Shop - Proyectado</div>
+          <div style="font-size:22px;color:#8f1d52;font-weight:bold;">$273.114.786</div>
+          <div style="font-size:12px;color:#c0392b;">93,7%</div>
+          <div style="background:#ddd;border-radius:4px;height:6px;margin-top:6px;"><div style="background:#c0392b;width:93.7%;height:6px;border-radius:4px;"></div></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;border:1px solid #ddd;border-radius:6px;padding:10px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;">% Cumplimiento Combustible</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 1</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">107.12%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 7</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">107.16%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 2</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:99.61%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">99.61%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 6</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:92.21%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">92.21%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 3</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:89.36%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">89.36%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 4</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:82.57%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">82.57%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 5</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#1a2b6b;width:78.91%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">78.91%</span></div>
+        </div>
+        <div style="flex:1;min-width:200px;border:1px solid #ddd;border-radius:6px;padding:10px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;">% Cumplimiento Lubricantes</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 6</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">154.9%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 5</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">105.0%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 3</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">101.7%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 2</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:86.3%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">86.3%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 4</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:69.3%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">69.3%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 1</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:59.4%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">59.4%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 7</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#2e7d32;width:44.0%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">44.0%</span></div>
+        </div>
+        <div style="flex:1;min-width:200px;border:1px solid #ddd;border-radius:6px;padding:10px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;">% Cumplimiento Shop</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 1</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">117.1%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 4</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">108.7%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 3</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">100.6%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 6</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:100%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">100.4%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 2</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:78.3%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">78.3%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 5</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:77.9%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">77.9%</span></div>
+<div style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px;"><span style="width:70px;">Estación 7</span><div style="flex:1;background:#eee;border-radius:3px;height:12px;"><div style="background:#8f1d52;width:46.6%;height:12px;border-radius:3px;"></div></div><span style="width:45px;text-align:right;">46.6%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="viz-card" style="font-family: Arial, sans-serif;">
+      <div style="background:#6b6b6b;color:white;padding:12px;text-align:center;font-weight:bold;border-radius:4px;margin-bottom:12px;">Mix de combustibles - GSB</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:90px;">Mes: julio (1)</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Estación</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Segmento</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Producto</div>
+        <div style="background:#a3255e;color:white;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:bold;">Borrar filtros</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:140px;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-size:11px;color:#555;">DG2 - Proyección vigente</div>
+          <div style="font-size:18px;color:#a3a01e;font-weight:bold;">1.867 m³</div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">Cumplimiento</div>
+          <div style="font-size:15px;color:#a3a01e;font-weight:bold;">98,5%</div>
+        </div>
+        <div style="flex:1;min-width:140px;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-size:11px;color:#555;">DG3 - Proyección vigente</div>
+          <div style="font-size:18px;color:#c0392b;font-weight:bold;">427 m³</div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">Cumplimiento</div>
+          <div style="font-size:15px;color:#c0392b;font-weight:bold;">87,2%</div>
+        </div>
+        <div style="flex:1;min-width:140px;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-size:11px;color:#555;">NG2 - Proyección vigente</div>
+          <div style="font-size:18px;color:#2c4a8f;font-weight:bold;">544 m³</div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">Cumplimiento</div>
+          <div style="font-size:15px;color:#2c4a8f;font-weight:bold;">89,5%</div>
+        </div>
+        <div style="flex:1;min-width:140px;border:1px solid #ddd;border-radius:6px;padding:10px;text-align:center;">
+          <div style="font-size:11px;color:#555;">NG3 - Proyección vigente</div>
+          <div style="font-size:18px;color:#2e7d32;font-weight:bold;">226 m³</div>
+          <div style="font-size:11px;color:#555;margin-top:4px;">Cumplimiento</div>
+          <div style="font-size:15px;color:#2e7d32;font-weight:bold;">83,3%</div>
+        </div>
+      </div>
+      <div style="font-weight:bold;font-size:13px;margin-bottom:10px;text-align:center;">Mix combustibles por estación</div>
+      <div style="display:flex;gap:14px;font-size:11px;margin-bottom:10px;">
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#c9b02e;display:inline-block;"></span>DG2</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#d98a6a;display:inline-block;"></span>DG3</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#8b8fc4;display:inline-block;"></span>NG2</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#7fb87f;display:inline-block;"></span>NG3</span>
+      </div>
+      <div style="position:relative;width:100%;height:220px;">
+        <canvas id="mixChart"></canvas>
+      </div>
+    </div>
+
+    <div class="viz-card" style="font-family: Arial, sans-serif;">
+      <div style="background:#6b6b6b;color:white;padding:12px;text-align:center;font-weight:bold;border-radius:4px;margin-bottom:12px;">Evolución y tendencia - GSB</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:90px;">Mes: julio (1)</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Estación</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Segmento</div>
+        <div style="background:#a3255e;color:white;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:bold;">Borrar filtros</div>
+      </div>
+      <div style="font-weight:bold;font-size:13px;margin-bottom:8px;text-align:center;">Combustible - Evolución de cumplimiento por corte</div>
+      <div style="position:relative;width:100%;height:260px;margin-bottom:16px;">
+        <canvas id="evolChart"></canvas>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <tr style="background:#f0f0f0;"><td style="padding:6px 8px;text-align:left;">Estación</td><td style="padding:6px 8px;text-align:right;">Corte10</td><td style="padding:6px 8px;text-align:right;">Corte20</td><td style="padding:6px 8px;text-align:right;">Corte30</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 4</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">92%</td><td style="padding:5px 8px;text-align:right;background:#f2efd6;">79%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">83%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 7</td><td style="padding:5px 8px;text-align:right;background:#b8ab1e;color:white;">113%</td><td style="padding:5px 8px;text-align:right;background:#b8ab1e;color:white;">108%</td><td style="padding:5px 8px;text-align:right;background:#b8ab1e;color:white;">107%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 6</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">86%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">87%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">92%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 5</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">88%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">82%</td><td style="padding:5px 8px;text-align:right;background:#f2efd6;">79%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 1</td><td style="padding:5px 8px;text-align:right;background:#f2efd6;">80%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">85%</td><td style="padding:5px 8px;text-align:right;background:#b8ab1e;color:white;">107%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 2</td><td style="padding:5px 8px;text-align:right;background:#cfc55a;">100%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">97%</td><td style="padding:5px 8px;text-align:right;background:#cfc55a;">100%</td></tr>
+        <tr><td style="padding:5px 8px;">Estación 3</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">89%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">84%</td><td style="padding:5px 8px;text-align:right;background:#e5dfa0;">89%</td></tr>
+      </table>
+    </div>
+
+    <div class="viz-card" style="font-family: Arial, sans-serif;">
+      <div style="background:#6b6b6b;color:white;padding:12px;text-align:center;font-weight:bold;border-radius:4px;margin-bottom:12px;">Indicadores operativos - GSB</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:90px;">Mes: julio (1)</div>
+        <div style="background:#eee;border-radius:4px;padding:8px 12px;font-size:12px;flex:1;min-width:70px;">Estación</div>
+        <div style="background:#a3255e;color:white;border-radius:4px;padding:8px 14px;font-size:12px;font-weight:bold;">Borrar filtros</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:130px;border:1px solid #ddd;border-radius:6px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#555;">Venta diaria - Combustible</div>
+          <div style="font-size:20px;color:#1a2b6b;font-weight:bold;">99 m³</div>
+        </div>
+        <div style="flex:1;min-width:130px;border:1px solid #ddd;border-radius:6px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#555;">Venta diaria - Lubricantes</div>
+          <div style="font-size:20px;color:#2e7d32;font-weight:bold;">280 lts</div>
+        </div>
+        <div style="flex:1;min-width:130px;border:1px solid #ddd;border-radius:6px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#555;">Venta diaria - Shop</div>
+          <div style="font-size:18px;color:#8f1d52;font-weight:bold;">\$8.810.154</div>
+        </div>
+        <div style="flex:1;min-width:130px;border:1px solid #ddd;border-radius:6px;padding:12px;text-align:center;">
+          <div style="font-size:11px;color:#555;">Días relevados</div>
+          <div style="font-size:20px;color:#c07a1e;font-weight:bold;">31</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;text-align:center;">Ranking venta diaria - Combustible</div>
+          <div style="position:relative;height:180px;"><canvas id="rankCombChart"></canvas></div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;text-align:center;">Ranking venta diaria - Lubricantes</div>
+          <div style="position:relative;height:180px;"><canvas id="rankLubChart"></canvas></div>
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <div style="font-weight:bold;font-size:12px;margin-bottom:8px;text-align:center;">Ranking venta diaria - Shop</div>
+          <div style="position:relative;height:180px;"><canvas id="rankShopChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+<footer class="site-footer">
+  <p>Luisina Ysa · Analista de Datos</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const estaciones = ['Estación 4','Estación 2','Estación 7','Estación 5','Estación 1','Estación 6','Estación 3'];
+
+new Chart(document.getElementById('mixChart'), {
+  type: 'bar',
+  data: {
+    labels: estaciones,
+    datasets: [
+      { label: 'DG2', data: [89,416,255,263,415,128,302], backgroundColor: '#c9b02e', stack: 's' },
+      { label: 'DG3', data: [84,68,26,43,86,47,71], backgroundColor: '#d98a6a', stack: 's' },
+      { label: 'NG2', data: [163,114,87,72,49,32,26], backgroundColor: '#8b8fc4', stack: 's' },
+      { label: 'NG3', data: [86,35,18,21,36,18,9], backgroundColor: '#7fb87f', stack: 's' }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true } }
+  }
+});
+
+new Chart(document.getElementById('evolChart'), {
+  type: 'line',
+  data: {
+    labels: ['Corte10','Corte20','Corte30'],
+    datasets: [
+      { label: 'Estación 7', data: [113,108,107], borderColor: '#9b59b6', backgroundColor: '#9b59b6' },
+      { label: 'Estación 2', data: [100,97,100], borderColor: '#2c4a8f', backgroundColor: '#2c4a8f' },
+      { label: 'Estación 1', data: [80,85,107], borderColor: '#8fae3a', backgroundColor: '#8fae3a' },
+      { label: 'Estación 6', data: [86,87,92], borderColor: '#2fb5b5', backgroundColor: '#2fb5b5' },
+      { label: 'Estación 3', data: [89,84,89], borderColor: '#e08a3c', backgroundColor: '#e08a3c' },
+      { label: 'Estación 4', data: [92,79,83], borderColor: '#e0c23c', backgroundColor: '#e0c23c' },
+      { label: 'Estación 5', data: [88,82,79], borderColor: '#e05a8a', backgroundColor: '#e05a8a' },
+      { label: 'Meta', data: [100,100,100], borderColor: '#2e7d32', borderDash: [6,4], pointRadius: 0 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 10 } } } },
+    scales: { y: { min: 20, max: 120, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+new Chart(document.getElementById('rankCombChart'), {
+  type: 'bar',
+  data: { labels: ['Estación 2','Estación 1','Estación 4','Estación 3','Estación 5','Estación 7','Estación 6'],
+    datasets: [{ data: [21,19,14,14,13,13,7], backgroundColor: '#1a2b6b' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+});
+new Chart(document.getElementById('rankLubChart'), {
+  type: 'bar',
+  data: { labels: ['Estación 1','Estación 3','Estación 2','Estación 5','Estación 4','Estación 6','Estación 7'],
+    datasets: [{ data: [86,57,64,26,29,10,7], backgroundColor: '#2e7d32' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+});
+new Chart(document.getElementById('rankShopChart'), {
+  type: 'bar',
+  data: { labels: ['Estación 1','Estación 4','Estación 2','Estación 6','Estación 3','Estación 5','Estación 7'],
+    datasets: [{ data: [2250000,1890000,1260000,1260000,990000,769200,461800], backgroundColor: '#8f1d52' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } } } }
+});
+</script>
+
+</body>
+</html>
